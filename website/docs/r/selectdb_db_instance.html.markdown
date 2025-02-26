@@ -91,7 +91,7 @@ The following attributes are exported:
 * `region_id` - The region ID of the instance.
 * `engine` - The engine of DBInstance. Always `selectdb`.
 * `engine_minor_version` - The current DBInstance minor version.
-* `status` - The status of the resource. Valid values: `ACTIVE`,`STOPPED`,`STARTING`,`RESTART`.
+* `status` - The status of the resource. Valid values: `ACTIVATION`,`STOPPED`,`STARTING`,`RESTART`.
 * `cpu_prepaid` - The sum of cpu resource amount for every `Subscription` clusters in DBInstance.
 * `memory_prepaid` - The sum of memory resource amount offor every `Subscription` clusters in DBInstance.
 * `cache_size_prepaid` - The sum of cache size for every `Subscription` clusters in DBInstance.
@@ -126,7 +126,7 @@ The following attributes are exported:
 
 The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration-0-11/resources.html#timeouts) for certain actions:
 
-* `create` - (Defaults to 60 mins) Used when creating the SelectDB DBInstance (until it reaches the initial `ACTIVE` status).
+* `create` - (Defaults to 60 mins) Used when creating the SelectDB DBInstance (until it reaches the initial `ACTIVATION` status).
 * `update` - (Defaults to 30 mins) Used when update the SelectDB DBInstance.
 * `delete` - (Defaults to 10 mins) Used when delete the SelectDB DBInstance.
 

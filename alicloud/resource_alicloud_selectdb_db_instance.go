@@ -272,7 +272,7 @@ func resourceAliCloudSelectDBDbInstanceCreate(d *schema.ResourceData, meta inter
 		d.SetId(fmt.Sprint(instanceId))
 	}
 
-	stateConfPreparing := BuildStateConf([]string{"RESOURCE_PREPARING", "CREATING"}, []string{"ACTIVE"}, d.Timeout(schema.TimeoutCreate), 1*time.Minute, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
+	stateConfPreparing := BuildStateConf([]string{"RESOURCE_PREPARING", "CREATING"}, []string{"ACTIVATION"}, d.Timeout(schema.TimeoutCreate), 1*time.Minute, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
 	if _, err := stateConfPreparing.WaitForState(); err != nil {
 		return WrapErrorf(err, IdMsg, d.Id())
 	}
@@ -283,7 +283,7 @@ func resourceAliCloudSelectDBDbInstanceCreate(d *schema.ResourceData, meta inter
 			if _, err := selectDBService.AllocateSelectDBInstancePublicConnection(d.Id()); err != nil {
 				return WrapError(err)
 			}
-			stateConf := BuildStateConf([]string{"NET_CREATING"}, []string{"ACTIVE"}, d.Timeout(schema.TimeoutCreate), 1*time.Minute, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
+			stateConf := BuildStateConf([]string{"NET_CREATING"}, []string{"ACTIVATION"}, d.Timeout(schema.TimeoutCreate), 1*time.Minute, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
 			if _, err := stateConf.WaitForState(); err != nil {
 				return WrapErrorf(err, IdMsg, d.Id())
 			}
@@ -345,7 +345,7 @@ func resourceAliCloudSelectDBDbInstanceUpdate(d *schema.ResourceData, meta inter
 			if _, err := selectDBService.ReleaseSelectDBInstancePublicConnection(d.Id(), connectionString); err != nil {
 				return WrapError(err)
 			}
-			stateConf := BuildStateConf([]string{"NET_DELETING"}, []string{"ACTIVE"}, d.Timeout(schema.TimeoutUpdate), 1*time.Minute, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
+			stateConf := BuildStateConf([]string{"NET_DELETING"}, []string{"ACTIVATION"}, d.Timeout(schema.TimeoutUpdate), 1*time.Minute, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
 			if _, err := stateConf.WaitForState(); err != nil {
 				return WrapErrorf(err, IdMsg, d.Id())
 			}
@@ -355,7 +355,7 @@ func resourceAliCloudSelectDBDbInstanceUpdate(d *schema.ResourceData, meta inter
 			if _, err := selectDBService.AllocateSelectDBInstancePublicConnection(d.Id()); err != nil {
 				return WrapError(err)
 			}
-			stateConf := BuildStateConf([]string{"NET_CREATING"}, []string{"ACTIVE"}, d.Timeout(schema.TimeoutUpdate), 1*time.Minute, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
+			stateConf := BuildStateConf([]string{"NET_CREATING"}, []string{"ACTIVATION"}, d.Timeout(schema.TimeoutUpdate), 1*time.Minute, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
 			if _, err := stateConf.WaitForState(); err != nil {
 				return WrapErrorf(err, IdMsg, d.Id())
 			}
@@ -402,7 +402,7 @@ func resourceAliCloudSelectDBDbInstanceUpdate(d *schema.ResourceData, meta inter
 			if err != nil {
 				return WrapErrorf(err, DefaultErrorMsg, d.Id(), "UpgradeSelectDBInstanceEngineVersion", AlibabaCloudSdkGoERROR)
 			}
-			stateConf := BuildStateConf([]string{"MODULE_UPGRADING"}, []string{"ACTIVE"}, d.Timeout(schema.TimeoutUpdate), 10*time.Second, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
+			stateConf := BuildStateConf([]string{"MODULE_UPGRADING"}, []string{"ACTIVATION"}, d.Timeout(schema.TimeoutUpdate), 10*time.Second, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
 			if _, err := stateConf.WaitForState(); err != nil {
 				return WrapErrorf(err, IdMsg, d.Id())
 			}
@@ -494,7 +494,7 @@ func resourceAliCloudSelectDBDbInstanceUpdate(d *schema.ResourceData, meta inter
 		d.SetPartial("desired_security_ip_lists")
 	}
 	stateConf := BuildStateConf([]string{"RESOURCE_PREPARING", "CREATING", "CLASS_CHANGING", "MODULE_UPGRADING", "NET_CREATING", "NET_DELETING"},
-		[]string{"ACTIVE"}, d.Timeout(schema.TimeoutUpdate), 10*time.Second, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
+		[]string{"ACTIVATION"}, d.Timeout(schema.TimeoutUpdate), 10*time.Second, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
 
 	if _, err := stateConf.WaitForState(); err != nil {
 		return WrapErrorf(err, IdMsg, d.Id())
@@ -666,7 +666,7 @@ func resourceAliCloudSelectDBDbInstanceDelete(d *schema.ResourceData, meta inter
 	selectDBService := SelectDBService{client}
 
 	stateConf := BuildStateConf([]string{"RESOURCE_PREPARING", "CREATING", "CLASS_CHANGING", "MODULE_UPGRADING", "NET_CREATING", "NET_DELETING"},
-		[]string{"ACTIVE"}, d.Timeout(schema.TimeoutDelete), 10*time.Second, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
+		[]string{"ACTIVATION"}, d.Timeout(schema.TimeoutDelete), 10*time.Second, selectDBService.SelectDBDbInstanceStateRefreshFunc(d.Id(), []string{"DELETING"}))
 	if _, err := stateConf.WaitForState(); err != nil {
 		return WrapErrorf(err, IdMsg, d.Id())
 	}
