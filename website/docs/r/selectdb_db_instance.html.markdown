@@ -47,6 +47,7 @@ resource "alicloud_selectdb_db_instance" "default" {
   db_instance_class       = "selectdb.xlarge"
   db_instance_description = var.name
   cache_size              = 200
+  engine_version          = "3.0"
   payment_type            = "PayAsYouGo"
   vpc_id                  = data.alicloud_vswitches.default.vswitches.0.vpc_id
   zone_id                 = data.alicloud_vswitches.default.vswitches.0.zone_id
@@ -61,6 +62,7 @@ The following arguments are supported:
 
 * `db_instance_class` - (Required) The class for default cluster in DBInstance. db_cluster_class has a range of class from `selectdb.xlarge` to `selectdb.256xlarge`.
 * `cache_size` - (Required) The cache size in DBInstance on creating default cluster. The number should be divided by 100.
+* `engine_version` - (Required) The current DBInstance major version.
 * `payment_type` - (Required) The payment type of the resource. Valid values: `PayAsYouGo`,`Subscription`.
 * `db_instance_description` - (Required) The DBInstance description.
 * `period` - (Optional) It is valid when payment_type is `Subscription`. Valid values are `Year`, `Month`.

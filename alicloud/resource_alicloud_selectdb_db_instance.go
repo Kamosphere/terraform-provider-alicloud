@@ -36,6 +36,11 @@ func resourceAliCloudSelectDBDbInstance() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"engine_version": {
+				Type:     schema.TypeString,
+				ValidateFunc: StringInSlice([]string{"3.0", "4.0"}, false),
+				Required:     true,
+			},
 			"payment_type": {
 				Type:         schema.TypeString,
 				ValidateFunc: StringInSlice([]string{"PayAsYouGo", "Subscription"}, false),
@@ -492,6 +497,7 @@ func resourceAliCloudSelectDBDbInstanceRead(d *schema.ResourceData, meta interfa
 	}
 
 	d.Set("engine", instanceResp["Engine"])
+	d.Set("engine_version", instanceResp["EngineVersion"])
 	d.Set("engine_minor_version", instanceResp["EngineMinorVersion"])
 
 	d.Set("region_id", instanceResp["RegionId"])
@@ -666,7 +672,7 @@ func buildSelectDBCreateInstanceRequest(d *schema.ResourceData, meta interface{}
 
 	request := map[string]interface{}{
 		"Engine":                "SelectDB",
-		"EngineVersion":         "3.0",
+		"EngineVersion":         d.Get("engine_version").(string),
 		"DBInstanceClass":       d.Get("db_instance_class").(string),
 		"RegionId":              client.RegionId,
 		"ZoneId":                d.Get("zone_id").(string),
