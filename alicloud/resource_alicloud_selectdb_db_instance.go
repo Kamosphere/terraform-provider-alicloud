@@ -53,6 +53,12 @@ func resourceAliCloudSelectDBDbInstance() *schema.Resource {
 				Optional:         true,
 				DiffSuppressFunc: selectdbPostPaidDiffSuppressFunc,
 			},
+			"created_engine_version": {
+				Type:     schema.TypeString,
+				ValidateFunc: StringInSlice([]string{"3.0", "4.0"}, false),
+				Required:     true,
+				ForceNew: true,
+			},
 			"zone_id": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -666,7 +672,7 @@ func buildSelectDBCreateInstanceRequest(d *schema.ResourceData, meta interface{}
 
 	request := map[string]interface{}{
 		"Engine":                "SelectDB",
-		"EngineVersion":         "3.0",
+		"EngineVersion":         d.Get("created_engine_version").(string),
 		"DBInstanceClass":       d.Get("db_instance_class").(string),
 		"RegionId":              client.RegionId,
 		"ZoneId":                d.Get("zone_id").(string),
