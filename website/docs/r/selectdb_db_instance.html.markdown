@@ -72,6 +72,7 @@ The following arguments are supported:
 * `vswitch_id` - (Required, ForceNew) The ID of vswitch for DBInstance.
 * `enable_public_network` - (Optional) If DBInstance need to open public network, set it to `true`.
 * `upgraded_engine_minor_version` - (Optional) The DBInstance minor version want to upgraded to.
+* `admin_pass` - (Optional) The password for DBInstance using admin account.
 * `tags` - (Optional) A mapping of tags to assign to the resource.
   - Key: It can be up to 64 characters in length. It cannot begin with "aliyun", "acs:", "http://", or "https://". It cannot be a null string.
   - Value: It can be up to 128 characters in length. It cannot begin with "aliyun", "acs:", "http://", or "https://". It can be a null string.

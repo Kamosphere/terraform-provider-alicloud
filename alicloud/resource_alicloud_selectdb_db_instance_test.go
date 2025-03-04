@@ -90,6 +90,7 @@ func TestAccAliCloudSelectDBDbInstance_basic_info(t *testing.T) {
 					"cache_size":              "200",
 					"created_engine_version":          "4.0",
 					"payment_type":            "PayAsYouGo",
+					"admin_pass":            "test_123",
 					"zone_id":                 "${data.alicloud_vswitches.default.vswitches.0.zone_id}",
 					"vpc_id":                  "${data.alicloud_vswitches.default.vswitches.0.vpc_id}",
 					"vswitch_id":              "${data.alicloud_vswitches.default.vswitches.0.id}",
@@ -106,6 +107,7 @@ func TestAccAliCloudSelectDBDbInstance_basic_info(t *testing.T) {
 						"cache_size":                  "200",
 						"created_engine_version":              "4.0",
 						"payment_type":                "PayAsYouGo",
+						"admin_pass":            "test_123",
 						"zone_id":                     CHECKSET,
 						"vpc_id":                      CHECKSET,
 						"vswitch_id":                  CHECKSET,
@@ -275,6 +277,16 @@ func TestAccAliCloudSelectDBDbInstance_basic_payment_modify_upgrade(t *testing.T
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheck(map[string]string{
 						"db_instance_description": name + "_desc",
+					}),
+				),
+			},
+			{
+				Config: testAccConfig(map[string]interface{}{
+					"admin_pass": "test_123",
+				}),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheck(map[string]string{
+						"admin_pass": "test_123",
 					}),
 				),
 			},

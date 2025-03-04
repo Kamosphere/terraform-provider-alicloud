@@ -84,6 +84,11 @@ func resourceAliCloudSelectDBDbInstance() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
+			"admin_pass": {
+				Type:     schema.TypeString,
+				Sensitive: true,
+				Optional: true,
+			},
 			"upgraded_engine_minor_version": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -459,6 +464,14 @@ func resourceAliCloudSelectDBDbInstanceUpdate(d *schema.ResourceData, meta inter
 			return WrapError(err)
 		}
 		d.SetPartial("tags")
+	}
+
+	if d.HasChange("admin_pass") {
+		_, newPass := d.GetChange("admin_pass")
+		if _, err := selectDBService.ModifySelectDBInstanceAdminPass(d.Id(), newPass.(string)); err != nil {
+			return WrapError(err)
+		}
+		d.SetPartial("admin_pass")
 	}
 
 	if d.HasChange("desired_security_ip_lists") {
