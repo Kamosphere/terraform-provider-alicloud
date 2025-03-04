@@ -88,7 +88,9 @@ func TestAccAliCloudSelectDBDbInstance_basic_info(t *testing.T) {
 					"db_instance_class":       "selectdb.xlarge",
 					"db_instance_description": name,
 					"cache_size":              "200",
+					"created_engine_version":          "4.0",
 					"payment_type":            "PayAsYouGo",
+					"admin_pass":            "test_123",
 					"zone_id":                 "${data.alicloud_vswitches.default.vswitches.0.zone_id}",
 					"vpc_id":                  "${data.alicloud_vswitches.default.vswitches.0.vpc_id}",
 					"vswitch_id":              "${data.alicloud_vswitches.default.vswitches.0.id}",
@@ -103,7 +105,9 @@ func TestAccAliCloudSelectDBDbInstance_basic_info(t *testing.T) {
 					testAccCheck(map[string]string{
 						"db_instance_class":           "selectdb.xlarge",
 						"cache_size":                  "200",
+						"created_engine_version":              "4.0",
 						"payment_type":                "PayAsYouGo",
+						"admin_pass":            "test_123",
 						"zone_id":                     CHECKSET,
 						"vpc_id":                      CHECKSET,
 						"vswitch_id":                  CHECKSET,
@@ -212,7 +216,7 @@ func TestAccAliCloudSelectDBDbInstance_basic_info(t *testing.T) {
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{"security_ip_lists", "gmt_modified",
 					"instance_net_infos", "desired_security_ip_lists", "db_instance_class",
-					"enable_public_network"},
+					"enable_public_network", "admin_pass", "created_engine_version"},
 			},
 		},
 	})
@@ -244,6 +248,7 @@ func TestAccAliCloudSelectDBDbInstance_basic_payment_modify_upgrade(t *testing.T
 					"db_instance_class":       "selectdb.xlarge",
 					"db_instance_description": name,
 					"cache_size":              "200",
+					"created_engine_version":          "3.0",
 					"payment_type":            "Subscription",
 					"period":                  "Month",
 					"period_time":             "1",
@@ -255,6 +260,7 @@ func TestAccAliCloudSelectDBDbInstance_basic_payment_modify_upgrade(t *testing.T
 					testAccCheck(map[string]string{
 						"db_instance_class": "selectdb.xlarge",
 						"cache_size":        "200",
+						"created_engine_version":    "3.0",
 						"payment_type":      "Subscription",
 						"period":            "Month",
 						"period_time":       "1",
@@ -276,12 +282,22 @@ func TestAccAliCloudSelectDBDbInstance_basic_payment_modify_upgrade(t *testing.T
 			},
 			{
 				Config: testAccConfig(map[string]interface{}{
-					"upgraded_engine_minor_version": "4.0.1-beta",
+					"admin_pass": "test_123",
 				}),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheck(map[string]string{
-						"engine_minor_version":          "4.0.1",
-						"upgraded_engine_minor_version": "4.0.1-beta",
+						"admin_pass": "test_123",
+					}),
+				),
+			},
+			{
+				Config: testAccConfig(map[string]interface{}{
+					"upgraded_engine_minor_version": "4.0.4",
+				}),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheck(map[string]string{
+						"engine_minor_version":          "4.0.4",
+						"upgraded_engine_minor_version": "4.0.4",
 					}),
 				),
 			},
@@ -300,7 +316,7 @@ func TestAccAliCloudSelectDBDbInstance_basic_payment_modify_upgrade(t *testing.T
 				ImportState:       true,
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{"gmt_modified", "cache_size", "db_instance_class", "upgraded_engine_minor_version",
-					"enable_public_network", "period", "period_time", "instance_net_infos", "engine_minor_version"},
+					"enable_public_network", "period", "period_time", "instance_net_infos", "engine_minor_version", "admin_pass", "created_engine_version"},
 			},
 		},
 	})

@@ -53,6 +53,12 @@ func resourceAliCloudSelectDBDbInstance() *schema.Resource {
 				Optional:         true,
 				DiffSuppressFunc: selectdbPostPaidDiffSuppressFunc,
 			},
+			"created_engine_version": {
+				Type:     schema.TypeString,
+				ValidateFunc: StringInSlice([]string{"3.0", "4.0"}, false),
+				Required:     true,
+				ForceNew: true,
+			},
 			"zone_id": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -76,6 +82,11 @@ func resourceAliCloudSelectDBDbInstance() *schema.Resource {
 			// flag for public network and update
 			"enable_public_network": {
 				Type:     schema.TypeBool,
+				Optional: true,
+			},
+			"admin_pass": {
+				Type:     schema.TypeString,
+				Sensitive: true,
 				Optional: true,
 			},
 			"upgraded_engine_minor_version": {
@@ -455,6 +466,14 @@ func resourceAliCloudSelectDBDbInstanceUpdate(d *schema.ResourceData, meta inter
 		d.SetPartial("tags")
 	}
 
+	if d.HasChange("admin_pass") {
+		_, newPass := d.GetChange("admin_pass")
+		if _, err := selectDBService.ModifySelectDBInstanceAdminPass(d.Id(), newPass.(string)); err != nil {
+			return WrapError(err)
+		}
+		d.SetPartial("admin_pass")
+	}
+
 	if d.HasChange("desired_security_ip_lists") {
 		_, newDesc := d.GetChange("desired_security_ip_lists")
 		for _, v := range newDesc.([]interface{}) {
@@ -666,7 +685,7 @@ func buildSelectDBCreateInstanceRequest(d *schema.ResourceData, meta interface{}
 
 	request := map[string]interface{}{
 		"Engine":                "SelectDB",
-		"EngineVersion":         "3.0",
+		"EngineVersion":         d.Get("created_engine_version").(string),
 		"DBInstanceClass":       d.Get("db_instance_class").(string),
 		"RegionId":              client.RegionId,
 		"ZoneId":                d.Get("zone_id").(string),
