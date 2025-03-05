@@ -47,6 +47,7 @@ resource "alicloud_selectdb_db_instance" "default" {
   db_instance_class       = "selectdb.xlarge"
   db_instance_description = var.name
   cache_size              = 200
+  created_engine_version  = "3.0"
   payment_type            = "PayAsYouGo"
   vpc_id                  = data.alicloud_vswitches.default.vswitches.0.vpc_id
   zone_id                 = data.alicloud_vswitches.default.vswitches.0.zone_id
@@ -65,11 +66,13 @@ The following arguments are supported:
 * `db_instance_description` - (Required) The DBInstance description.
 * `period` - (Optional) It is valid when payment_type is `Subscription`. Valid values are `Year`, `Month`.
 * `period_time` - (Optional) The duration that you will buy DBInstance. It is valid when payment_type is `Subscription`. Valid values: [1~9], 12, 24, 36.
+* `created_engine_version` - (Required, ForceNew, Available since 1.245.0) The major version used in creating DBinstance.
 * `zone_id` - (Required, ForceNew) The ID of zone for DBInstance.
 * `vpc_id` - (Required, ForceNew) The ID of the VPC for DBInstance.
 * `vswitch_id` - (Required, ForceNew) The ID of vswitch for DBInstance.
 * `enable_public_network` - (Optional) If DBInstance need to open public network, set it to `true`.
 * `upgraded_engine_minor_version` - (Optional) The DBInstance minor version want to upgraded to.
+* `admin_pass` - (Optional, Available since 1.245.0) The password for DBInstance using admin account.
 * `tags` - (Optional) A mapping of tags to assign to the resource.
   - Key: It can be up to 64 characters in length. It cannot begin with "aliyun", "acs:", "http://", or "https://". It cannot be a null string.
   - Value: It can be up to 128 characters in length. It cannot begin with "aliyun", "acs:", "http://", or "https://". It can be a null string.
