@@ -72,6 +72,11 @@ func resourceAliCloudSelectDBDbInstance() *schema.Resource {
 				Type:     schema.TypeInt,
 				Required: true,
 			},
+			"engine_minor_version": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "3.0.12",
+			},
 			"tags": tagsSchema(),
 			// flag for public network and update
 			"enable_public_network": {
@@ -82,10 +87,6 @@ func resourceAliCloudSelectDBDbInstance() *schema.Resource {
 				Type:      schema.TypeString,
 				Sensitive: true,
 				Optional:  true,
-			},
-			"upgraded_engine_minor_version": {
-				Type:     schema.TypeString,
-				Optional: true,
 			},
 			"desired_security_ip_lists": {
 				Type:     schema.TypeList,
@@ -110,10 +111,6 @@ func resourceAliCloudSelectDBDbInstance() *schema.Resource {
 				Computed: true,
 			},
 			"engine": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"engine_minor_version": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -365,8 +362,8 @@ func resourceAliCloudSelectDBDbInstanceUpdate(d *schema.ResourceData, meta inter
 
 	}
 
-	if d.HasChange("upgraded_engine_minor_version") && d.Get("upgraded_engine_minor_version") != "" {
-		_, newVersion := d.GetChange("upgraded_engine_minor_version")
+	if !d.IsNewResource() && d.HasChange("engine_minor_version") {
+		_, newVersion := d.GetChange("engine_minor_version")
 		instanceId := fmt.Sprint(d.Id())
 		instanceResp, err := selectDBService.DescribeSelectDBDbInstance(instanceId)
 		if err != nil {
@@ -408,7 +405,7 @@ func resourceAliCloudSelectDBDbInstanceUpdate(d *schema.ResourceData, meta inter
 			}
 		}
 
-		d.SetPartial("upgraded_engine_minor_version")
+		d.SetPartial("engine_minor_version")
 	}
 
 	cacheSizeModified := false
@@ -693,7 +690,7 @@ func buildSelectDBCreateInstanceRequest(d *schema.ResourceData, meta interface{}
 
 	request := map[string]interface{}{
 		"Engine":                "SelectDB",
-		"EngineVersion":         "3.0",
+		"EngineVersion":         d.Get("engine_minor_version").(string),
 		"DBInstanceClass":       d.Get("db_instance_class").(string),
 		"RegionId":              client.RegionId,
 		"ZoneId":                d.Get("zone_id").(string),
