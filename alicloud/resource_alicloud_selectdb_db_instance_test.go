@@ -62,7 +62,7 @@ func testSweepSelectDBDbInstance(region string) error {
 	return nil
 }
 
-func TestAccAliCloudSelectDBDbInstance_basic_info_upgrade_major_version(t *testing.T) {
+func TestAccAliCloudSelectDBDbInstance_basic_info_upgrade_version(t *testing.T) {
 	var v map[string]interface{}
 	resourceId := "alicloud_selectdb_db_instance.default"
 	ra := resourceAttrInit(resourceId, AliCloudSelectDBDbInstanceMap0)
@@ -89,7 +89,7 @@ func TestAccAliCloudSelectDBDbInstance_basic_info_upgrade_major_version(t *testi
 					"db_instance_description": name,
 					"cache_size":              "200",
 					"payment_type":            "PayAsYouGo",
-					"engine_minor_version":    "3.0.12",
+					"engine_minor_version":    "4.1.7",
 					"zone_id":                 "${data.alicloud_vswitches.default.vswitches.0.zone_id}",
 					"vpc_id":                  "${data.alicloud_vswitches.default.vswitches.0.vpc_id}",
 					"vswitch_id":              "${data.alicloud_vswitches.default.vswitches.0.id}",
@@ -105,7 +105,7 @@ func TestAccAliCloudSelectDBDbInstance_basic_info_upgrade_major_version(t *testi
 						"db_instance_class":           "selectdb.xlarge",
 						"cache_size":                  "200",
 						"payment_type":                "PayAsYouGo",
-						"engine_minor_version":        "3.0.12",
+						"engine_minor_version":        "4.1.7",
 						"zone_id":                     CHECKSET,
 						"vpc_id":                      CHECKSET,
 						"vswitch_id":                  CHECKSET,
@@ -188,11 +188,11 @@ func TestAccAliCloudSelectDBDbInstance_basic_info_upgrade_major_version(t *testi
 			},
 			{
 				Config: testAccConfig(map[string]interface{}{
-					"engine_minor_version": "4.0.4",
+					"engine_minor_version": "4.1.8",
 				}),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheck(map[string]string{
-						"engine_minor_version": "4.0.4",
+						"engine_minor_version": "4.1.8",
 					}),
 				),
 			},
@@ -266,7 +266,7 @@ func TestAccAliCloudSelectDBDbInstance_basic_payment_modify_upgrade_minor_versio
 					"db_instance_class":       "selectdb.xlarge",
 					"db_instance_description": name,
 					"cache_size":              "200",
-					"engine_minor_version":    "4.0.3",
+					"engine_minor_version":    "4.1.7",
 					"admin_pass":              "test_123",
 					"payment_type":            "Subscription",
 					"period":                  "Month",
@@ -300,11 +300,11 @@ func TestAccAliCloudSelectDBDbInstance_basic_payment_modify_upgrade_minor_versio
 			},
 			{
 				Config: testAccConfig(map[string]interface{}{
-					"engine_minor_version": "4.0.4",
+					"engine_minor_version": "4.1.8",
 				}),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheck(map[string]string{
-						"engine_minor_version": "4.0.4",
+						"engine_minor_version": "4.1.8",
 					}),
 				),
 			},
@@ -355,7 +355,7 @@ func TestAccAliCloudSelectDBDbInstance_deprecated_upgrade_minor_version(t *testi
 					"db_instance_class":             "selectdb.xlarge",
 					"db_instance_description":       name,
 					"cache_size":                    "200",
-					"upgraded_engine_minor_version": "4.0.3",
+					"upgraded_engine_minor_version": "4.1.7",
 					"admin_pass":                    "test_123",
 					"payment_type":                  "PayAsYouGo",
 					"zone_id":                       "${data.alicloud_vswitches.default.vswitches.0.zone_id}",
@@ -366,7 +366,7 @@ func TestAccAliCloudSelectDBDbInstance_deprecated_upgrade_minor_version(t *testi
 					testAccCheck(map[string]string{
 						"db_instance_class":             "selectdb.xlarge",
 						"cache_size":                    "200",
-						"upgraded_engine_minor_version": "4.0.3",
+						"upgraded_engine_minor_version": "4.1.7",
 						"payment_type":                  "PayAsYouGo",
 						"zone_id":                       CHECKSET,
 						"vpc_id":                        CHECKSET,
@@ -376,11 +376,11 @@ func TestAccAliCloudSelectDBDbInstance_deprecated_upgrade_minor_version(t *testi
 			},
 			{
 				Config: testAccConfig(map[string]interface{}{
-					"upgraded_engine_minor_version": "4.0.4",
+					"upgraded_engine_minor_version": "4.1.8",
 				}),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheck(map[string]string{
-						"upgraded_engine_minor_version": "4.0.4",
+						"upgraded_engine_minor_version": "4.1.8",
 					}),
 				),
 			},

@@ -48,7 +48,7 @@ resource "alicloud_selectdb_db_instance" "default" {
   db_instance_description = var.name
   cache_size              = 200
   payment_type            = "PayAsYouGo"
-  engine_minor_version    = "3.0.12"
+  engine_minor_version    = "4.1.8"
   vpc_id                  = data.alicloud_vswitches.default.vswitches.0.vpc_id
   zone_id                 = data.alicloud_vswitches.default.vswitches.0.zone_id
   vswitch_id              = data.alicloud_vswitches.default.vswitches.0.id
@@ -66,7 +66,7 @@ The following arguments are supported:
 * `cache_size` - (Required) The cache size in DBInstance on creating default cluster. The number should be divided by 100.
 * `payment_type` - (Required) The payment type of the resource. Valid values: `PayAsYouGo`,`Subscription`.
 * `db_instance_description` - (Required) The DBInstance description.
-* `engine_minor_version` - (Optional, Available since 1.248.0) The DBInstance minor version. Valid values: `3.0.12`,`4.0.4`.
+* `engine_minor_version` - (Optional, Available since 1.248.0) The DBInstance minor version. Valid values: `4.0.12`,`4.1.8`,`5.0.5`.
 * `upgraded_engine_minor_version` - (Deprecated since 1.248.0) Field `upgraded_engine_minor_version` has been deprecated from provider version 1.248.0. New field `engine_minor_version` instead.
 * `period` - (Optional) It is valid when payment_type is `Subscription`. Valid values are `Year`, `Month`.
 * `period_time` - (Optional) The duration that you will buy DBInstance. It is valid when payment_type is `Subscription`. Valid values: [1~9], 12, 24, 36.
